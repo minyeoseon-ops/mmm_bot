@@ -18,7 +18,7 @@ BOT_TOKEN = "8994734061:AAHS1j6WT3GhichYUehYAuniWrNTAZ19_uI"
 ADMIN_ID = 878726693  # Ваш личный Telegram ID (куда приходят заявки)
 
 # Links
-PLAYER_MINI_APP_URL = "https://https://b-a-sound.netlify.app/"  # Ссылка на Mini App До/После
+PLAYER_MINI_APP_URL = "https://b-a-sound.netlify.app/"  # Ссылка на Mini App До/После
 CALCULATOR_URL = "https://mentamixprice.netlify.app/"
 REVIEWS_POST_URL = "https://t.me/Mini_mint_mix/18"  # Ссылка на пост/комментарии с отзывами
 
