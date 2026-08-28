@@ -15,7 +15,7 @@ from aiogram.types import (
 
 # Configuration
 BOT_TOKEN = "8994734061:AAHS1j6WT3GhichYUehYAuniWrNTAZ19_uI"
-ADMIN_ID = 123456789  # Ваш личный Telegram ID (куда приходят заявки)
+ADMIN_ID = 878726693  # Ваш личный Telegram ID (куда приходят заявки)
 
 # Links
 PLAYER_MINI_APP_URL = "https://https://b-a-sound.netlify.app/"  # Ссылка на Mini App До/После
@@ -179,7 +179,7 @@ async def process_currency(message: types.Message, state: FSMContext):
     )
 
     # Отправка администратору (вам)
-    await bot.send_message(878726693, summary, parse_mode="Markdown")
+    await bot.send_message(ADMIN_ID, summary, parse_mode="Markdown")
 
     await state.clear()
 
