@@ -14,16 +14,17 @@ from aiogram.types import (
 )
 
 # Configuration
-BOT_TOKEN = "8994734061:AAHS1j6WT3GhichYUehYAuniWrNTAZ19_uI"
-ADMIN_ID = 878726693  # Ваш личный Telegram ID (куда приходят заявки)
+BOT_TOKEN = "ВАШ_СВЕЖИЙ_ТОКЕН_ИЗ_BOTFATHER"
+ADMIN_ID = 123456789  # Ваш Telegram ID
 
 # Links
-PLAYER_MINI_APP_URL = "https://b-a-sound.netlify.app/"  # Ссылка на Mini App До/После
-CALCULATOR_URL = "https://mentamixprice.netlify.app/"
-REVIEWS_POST_URL = "https://t.me/Mini_mint_mix/18"  # Ссылка на пост/комментарии с отзывами
+PLAYER_MINI_APP_URL = "https://t.me/your_bot/app"  # Ссылка на Mini App
+CALCULATOR_URL = "https://b-a-sound.netlify.app/"
+REVIEWS_POST_URL = "https://t.me/Mini_mint_mix/123"  # Ссылка на пост с отзывами
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
+
 
 # FSM States
 class OrderForm(StatesGroup):
@@ -33,6 +34,7 @@ class OrderForm(StatesGroup):
     group_type = State()
     extra_options = State()
     currency = State()
+
 
 # Keyboards
 def get_main_keyboard():
@@ -61,6 +63,7 @@ def get_main_keyboard():
         ]
     )
 
+
 def get_currency_keyboard():
     return ReplyKeyboardMarkup(
         keyboard=[
@@ -71,6 +74,7 @@ def get_currency_keyboard():
         one_time_keyboard=True,
     )
 
+
 def get_skip_keyboard():
     return ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="Пропустить")]],
@@ -78,30 +82,37 @@ def get_skip_keyboard():
         one_time_keyboard=True,
     )
 
+
 # Handlers
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):
     welcome_text = (
-        "Привет! Я бот для приёма заявок на сведение и мастеринг от **@Mini_mint_mix**.\n\n"
-        "Здесь вы можете рассчитать стоимость, послушать пример одной из работ и оставить заявку на сведение."
+        "Привет! Я бот для приёма заявок на сведение и мастеринг от <b>@Mini_mint_mix</b>.\n\n"
+        "Здесь вы можете рассчитать стоимость, послушать примеры работ и оставить заявку на сведение."
     )
     await message.answer(
-        welcome_text, reply_markup=get_main_keyboard(), parse_mode="Markdown"
+        welcome_text, reply_markup=get_main_keyboard(), parse_mode="HTML"
     )
+
 
 @dp.callback_query(F.data == "start_order")
 async def start_order(callback: types.CallbackQuery, state: FSMContext):
     await callback.answer()
-    
+
     user = callback.from_user
-    user_handle = f"@{user.username}" if user.username else f"ID: {user.id} ({user.first_name})"
+    user_handle = (
+        f"@{user.username}"
+        if user.username
+        else f"ID: {user.id} ({user.first_name})"
+    )
     await state.update_data(user_handle=user_handle)
 
     await callback.message.answer(
-        "Шаг 1/6: Укажите юзернейм вашего канала (или отправьте 'Пропустить', если нет):",
+        "Шаг 1/6: Укажите юзернейм вашего канала (или нажмите 'Пропустить'):",
         reply_markup=get_skip_keyboard(),
     )
     await state.set_state(OrderForm.channel_username)
+
 
 @dp.message(OrderForm.channel_username)
 async def process_channel(message: types.Message, state: FSMContext):
@@ -114,6 +125,7 @@ async def process_channel(message: types.Message, state: FSMContext):
     )
     await state.set_state(OrderForm.song_name)
 
+
 @dp.message(OrderForm.song_name)
 async def process_song_name(message: types.Message, state: FSMContext):
     await state.update_data(song_name=message.text)
@@ -123,6 +135,7 @@ async def process_song_name(message: types.Message, state: FSMContext):
     )
     await state.set_state(OrderForm.duration)
 
+
 @dp.message(OrderForm.duration)
 async def process_duration(message: types.Message, state: FSMContext):
     await state.update_data(duration=message.text)
@@ -131,6 +144,7 @@ async def process_duration(message: types.Message, state: FSMContext):
         "Шаг 4/6: Укажите формат (Соло / Дуэт / Трио / Группа) и количество участников:"
     )
     await state.set_state(OrderForm.group_type)
+
 
 @dp.message(OrderForm.group_type)
 async def process_group_type(message: types.Message, state: FSMContext):
@@ -142,29 +156,24 @@ async def process_group_type(message: types.Message, state: FSMContext):
     )
     await state.set_state(OrderForm.extra_options)
 
+
 @dp.message(OrderForm.extra_options)
 async def process_extra_options(message: types.Message, state: FSMContext):
     options = message.text if message.text != "Пропустить" else "Нет"
     await state.update_data(extra_options=options)
 
     await message.answer(
-        "Шаг 6/6: Выберите предпочтительную валюту для оплаты (рубли/звёзды):",
+        "Шаг 6/6: Выберите предпочтительную валюту для оплаты:",
         reply_markup=get_currency_keyboard(),
     )
     await state.set_state(OrderForm.currency)
+
 
 @dp.message(OrderForm.currency)
 async def process_currency(message: types.Message, state: FSMContext):
     await state.update_data(currency=message.text)
     data = await state.get_data()
 
-    # Сборка финального текста заявки
-   @dp.message(OrderForm.currency)
-async def process_currency(message: types.Message, state: FSMContext):
-    await state.update_data(currency=message.text)
-    data = await state.get_data()
-
-    # Сборка текста заявки в формате HTML (безопасно от символов _ и *)
     summary = (
         "📥 <b>НОВАЯ ЗАЯВКА НА СВЕДЕНИЕ</b>\n\n"
         f"1) <b>Заказчик:</b> {data['user_handle']}\n"
@@ -176,20 +185,21 @@ async def process_currency(message: types.Message, state: FSMContext):
         f"7) <b>Оплата:</b> {data['currency']}"
     )
 
-    # Отправка ответа клиенту
     await message.answer(
-        "Спасибо! Ваша заявка сформирована и отправлена звукорежиссёру. Скоро с вами свяжутся!\n\n" + summary,
+        "Спасибо! Ваша заявка сформирована и отправлена звукорежиссёру. Скоро с вами свяжутся!\n\n"
+        + summary,
         reply_markup=ReplyKeyboardRemove(),
         parse_mode="HTML",
     )
 
-    # Отправка вам (администратору)
     await bot.send_message(ADMIN_ID, summary, parse_mode="HTML")
 
     await state.clear()
 
+
 async def main():
     await dp.start_polling(bot)
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
