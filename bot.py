@@ -14,7 +14,7 @@ from aiogram.types import (
 )
 
 # Configuration
-BOT_TOKEN = "ВАШ_ТОКЕН_БОТА_ИЗ_BOTFATHER"
+BOT_TOKEN = "8994734061:AAHS1j6WT3GhichYUehYAuniWrNTAZ19_uI"
 ADMIN_ID = 123456789  # Ваш личный Telegram ID (куда приходят заявки)
 
 # Links
@@ -22,7 +22,7 @@ PLAYER_MINI_APP_URL = "https://https://b-a-sound.netlify.app/"  # Ссылка �
 CALCULATOR_URL = "https://mentamixprice.netlify.app/"
 REVIEWS_POST_URL = "https://t.me/Mini_mint_mix/18"  # Ссылка на пост/комментарии с отзывами
 
-bot = Bot(token="8994734061:AAG7I_9Z0TWsQIkyBe3Kwbxo8THjrRMg-X8")
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 
 # FSM States
