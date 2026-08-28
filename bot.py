@@ -160,26 +160,32 @@ async def process_currency(message: types.Message, state: FSMContext):
     data = await state.get_data()
 
     # Сборка финального текста заявки
+   @dp.message(OrderForm.currency)
+async def process_currency(message: types.Message, state: FSMContext):
+    await state.update_data(currency=message.text)
+    data = await state.get_data()
+
+    # Сборка текста заявки в формате HTML (безопасно от символов _ и *)
     summary = (
-        "📥 **НОВАЯ ЗАЯВКА НА СВЕДЕНИЕ**\n\n"
-        f"1) **Заказчик:** {data['user_handle']}\n"
-        f"2) **Канал:** {data['channel_username']}\n"
-        f"3) **Песня:** {data['song_name']}\n"
-        f"4) **Длительность:** {data['duration']}\n"
-        f"5) **Формат/Состав:** {data['group_type']}\n"
-        f"6) **Доп. опции:** {data['extra_options']}\n"
-        f"7) **Оплата:** {data['currency']}"
+        "📥 <b>НОВАЯ ЗАЯВКА НА СВЕДЕНИЕ</b>\n\n"
+        f"1) <b>Заказчик:</b> {data['user_handle']}\n"
+        f"2) <b>Канал:</b> {data['channel_username']}\n"
+        f"3) <b>Песня:</b> {data['song_name']}\n"
+        f"4) <b>Длительность:</b> {data['duration']}\n"
+        f"5) <b>Формат/Состав:</b> {data['group_type']}\n"
+        f"6) <b>Доп. опции:</b> {data['extra_options']}\n"
+        f"7) <b>Оплата:</b> {data['currency']}"
     )
 
-    # Отправка копии клиенту
+    # Отправка ответа клиенту
     await message.answer(
-        "Спасибо! Ваша заявка сформирована и отправлена сводчику. Скоро с вами свяжутся!\n\n" + summary,
+        "Спасибо! Ваша заявка сформирована и отправлена звукорежиссёру. Скоро с вами свяжутся!\n\n" + summary,
         reply_markup=ReplyKeyboardRemove(),
-        parse_mode="Markdown",
+        parse_mode="HTML",
     )
 
-    # Отправка администратору (вам)
-    await bot.send_message(ADMIN_ID, summary, parse_mode="Markdown")
+    # Отправка вам (администратору)
+    await bot.send_message(ADMIN_ID, summary, parse_mode="HTML")
 
     await state.clear()
 
