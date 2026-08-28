@@ -21,7 +21,7 @@ ADMIN_ID = 878726693  # Ваш Telegram ID
 # Links
 PLAYER_MINI_APP_URL = "https://t.me/Mint_mix_bot/ba_mixing"  # Ссылка на Mini App
 CALCULATOR_URL = "https://b-a-sound.netlify.app/"
-REVIEWS_POST_URL = "https://t.me/Mini_mint_mix/14"  # Ссылка на пост с отзывами
+REVIEWS_POST_URL = "https://t.me/Mini_mint_mix/18"  # Ссылка на пост с отзывами
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
