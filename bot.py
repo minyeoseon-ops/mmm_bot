@@ -14,8 +14,8 @@ from aiogram.types import (
 )
 
 # Configuration
-BOT_TOKEN = "ВАШ_СВЕЖИЙ_ТОКЕН_ИЗ_BOTFATHER"
-ADMIN_ID = 123456789  # Ваш Telegram ID
+BOT_TOKEN = "8994734061:AAHS1j6WT3GhichYUehYAuniWrNTAZ19_uI"
+ADMIN_ID = 878726693  # Ваш Telegram ID
 
 # Links
 PLAYER_MINI_APP_URL = "https://t.me/your_bot/app"  # Ссылка на Mini App
