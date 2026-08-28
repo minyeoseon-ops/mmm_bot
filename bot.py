@@ -93,9 +93,8 @@ async def cmd_start(message: types.Message):
 async def start_order(callback: types.CallbackQuery, state: FSMContext):
     await callback.answer()
     
-    # Автоматически сохраняем личный юзернейм
     user = callback.from_user
-    user_handle = f"@{user.username}" if user.username else f"[{user.first_name}](tg://user?id={user.id})"
+    user_handle = f"@{user.username}" if user.username else f"ID: {user.id} ({user.first_name})"
     await state.update_data(user_handle=user_handle)
 
     await callback.message.answer(
